@@ -43,18 +43,18 @@ shrinkage_factor <- 0.149  # From logged output
 
 **Goal:** Measure individual player impact on **win probability**, not just points
 
-- Traditional stats (PPG, RPG) miss **context** and **team synergy**
-- On/off metrics confound lineup quality with individual skill
-- **Win Probability** captures game situation: score, time, leverage
+- Traditional stats (PPG, RPG) miss **context** and **team dynamics**
+- On/off the court metrics mix the effects of lineup quality with individual skill
+- **Win Probability** captures game status: score, time, leverage
 
 ::: {.fragment}
 **Our Approach:** Regularized Adjusted Plus-Minus on the WP scale
 :::
 
 ::: notes
-Good afternoon. Today I'm presenting our analysis of player impact in NCAA men's basketball using a win probability framework. The goal is simple but powerful: we want to measure how much each player moves the needle on their team's chance of winning, not just how many points they score.
+Good afternoon. We are presenting our analysis of player impact in NCAA D1 men's basketball using a win probability framework. The goal is simple but powerful: we want to measure how much each player alters on their team's chance of winning, not just how many points they score.
 
-Traditional box score stats like points per game completely miss context. A bucket with 30 seconds left in a tie game is worth much more than one in garbage time. And simple on/off metrics get confounded by who you play with. Our approach uses Regularized Adjusted Plus-Minus on the win probability scale to isolate individual impact while accounting for game context.
+Traditional box score statistics, such as points per game, do not include the context. A bucket with 30 seconds left in a tie game is worth much more than one in non-clutch time. The on/off metrics get mixed up by who is playing with who. Our approach uses Regularized Adjusted Plus-Minus on the win probability scale to isolate individual impact while accounting for game context.
 :::
 
 ---
@@ -63,22 +63,22 @@ Traditional box score stats like points per game completely miss context. A buck
 
 **Data:** ESPN/hoopR, 7 seasons (2018-2024), 38K+ games, 12M+ plays
 
-**Critical limitation:** No substitution events in ESPN data
+**Limitation:** No substitution events in the data (tracking players on the court)
 
 ::: {.fragment}
 **Our solution:**
-- Use **starter-based, half-level stints** (defensible proxy)
-- Track unique players by `athlete_id` (critical: 1,411 name collisions!)
-- Weight by duration × leverage (close/clutch games matter more)
+- Use **starter-based, half-level stints** (justifiable)
+- Track unique players by `athlete_id` (1,411 name collisions)
+- Weight: duration × leverage (close/clutch games matter)
 - Time-decay older seasons (recent performance = more relevant)
 :::
 
 ::: notes
-We're working with seven seasons of ESPN data via the hoopR package—that's 38,000 games and over 12 million plays. But here's the challenge: ESPN doesn't provide substitution events. We don't know exactly when players check in and out.
+We're working with seven seasons of ESPN data via the hoopR package—that's 38,000 games and over 12 million plays. But our challenge is that ESPN doesn't provide substitution events, so we do not know exactly when players sub in and out for on-court lineups. Thus, granularly, we do not know the exact moments players are on the court.
 
-Our solution is to use starter-based, half-level stints. It's not perfect, but it's defensible given the data constraints. And here's a critical detail we caught: we must track players by unique athlete ID, not display names. We found 1,411 display names that map to multiple different athletes—imagine aggregating 18 different "Jalen Johnsons" into one phantom super-player! That would completely invalidate our rankings.
-
-We also weight stints by duration and leverage—close, clutch games get more weight than blowouts. And we apply time-decay so recent seasons matter more than 2018.
+- Our solution is to use starter-based, half-level stints because this gives a clean window to evaluate performance. Therefore, we know that the starters are on the court at the start of the half until the first sub or timeout. It's not perfect, but it's justifiable given the data constraints. 
+- We then found that we must track players by unique athlete ID, not display names, because we found 1,411 names that map one to many with multiple different athletes—imagine aggregating 18 different "Jalen Johnsons" into one phantom super-player! That would completely invalidate our rankings.
+- We also weight stints by duration and leverage—close, clutch games get more weight than blowouts. And we apply time decay so recent seasons matter more than 2018.
 :::
 
 ---
